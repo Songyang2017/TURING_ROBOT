@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>咨询详情</title>
+    <!-- <script src="../js/medicalCard/plugin/rem.js"></script> -->
+    <link rel="stylesheet" href="css/base.css">
+     <link rel="stylesheet" href="css/index.css">
+
+</head>
+<body>
+<div id="app" v-cloak>
+    <ul class="zxxq-cont">
+        <li v-for="x in msg" class="clearfix">
+            <!--<span>{{x.date}}</span>-->
+            <div :class="[x.host=='h'?left:right]" class="bg_img01 bg_img" v-if="x.host=='p'"></div>
+            <div :class="[x.host=='h'?left:right]" class="bg_img02 bg_img" v-if="x.host=='h'"></div>
+            <span :class="[x.host=='h'?msg_left:msg_right,x.host=='h'?left:right]" class="message_white">
+			{{x.text}}<img :src="x.img" v-if="x.img" alt=""></span>
+        </li>
+    </ul>
+    <div class="bot"><input type="text" v-model="turing_value"><span @click="foc">发送</span></div>
+</div>
+
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://cdn.bootcss.com/jquery/2.2.3/jquery.js"></script>
+<script src="js/sy_export.js"></script>
+<script src="js/tween.js"></script>
+<script>
+    "use strict";
+    var info=[
+        {host:'p',
+            text:"到那个医院好？东院还是西院？",
+            date:"2017-05-05 10:30"
+        },{host:'p',
+            text:"迪丽热巴（Dilraba），1992年6月3日出生于新疆乌鲁木齐，中国内地女演员，毕业于上海戏剧学院。 2013年，主演个人首部电视剧《阿娜尔罕》。2014年参演古装玄幻剧《古剑奇谭》，2015年主演校园魔幻网络剧《逆光之恋》 ，同年凭借都市爱情剧《克拉恋人》获得2015年国剧盛典最受欢迎新人女演员,2016年8月，主演都市爱情剧《麻辣变形计》",
+            date:"2017-05-05 10:23",
+            img:"https://wx3.sinaimg.cn/mw690/63885668ly1fme7nioiofj211k1e0qv5.jpg",
+            href:"https://www.bilibili.com/"
+        },{
+            host:'h',
+            text:"我们优秀的医师全在西院，东院已经出售，马上要拆了",
+            date:"2017-05-05 10:35"
+        },{
+            host:'h',
+            text:"ありがとうございます",
+            date:"2017-05-05 10:28"
+        },
+        {host:'p',
+            text:"哦好好，谢谢",
+            date:"2017-05-05 10:38"
+        },{
+            host:'h',
+            text:"请问还有什么疑问吗？",
+            date:"2017-05-05 10:40"
+        },
+        {host:'p',
+            text:"好的太感谢您了，以后欢迎来玩",
+            date:"2017-05-05 10:55"
+        },{
+            host:'h',
+            text:"我们朝九晚六，周末双休，福利优厚，来着的话请你吃饭",
+            date:"2017-05-05 10:50"
+        },
+        {host:'p',
+            text:"医院几点上班？",
+            date:"2017-05-05 10:42"
+        }
+    ];
+    var url="",vei_wrods="",gotop=0,user_words={};
+
+    var app=new Vue({
+        el:"#app",
+        mounted(){
+            //日期排序
+            info.sort(function(a,b){
+                return Date.parse(a.date)-Date.parse(b.date);
+            });
+            info.forEach((v,i,a)=>{return info[i].date=new Date(info[i].date).Format("yyyy年MM月dd hh:mm")})
+            console.log(this.msg);
+        },
+        data:{
+            turing_value:null,
+            msg:info,
+            left:"pull-left",
+            right:"pull-right",
+            msg_left:"message_left",
+            msg_right:"message_right"
+        },
+        methods:{
+            foc:function(){
+                url="http://www.tuling123.com/openapi/api?key=ef3764d4775942d88ccaa6c7146e8d43&info="+this.turing_value+"&userid=1";
+                $.post("dog.php",{url},function(data){
+                    vei_wrods=JSON.parse(data);
+                    vei_wrods.host="h";
+                    console.log(vei_wrods);
+                    user_words.text=app.turing_value;
+                    user_words.host="p",
+                    app.msg.push(user_words,vei_wrods)
+                    document.body.scrollTop=document.body.clientHeight+50;
+                })
+            }
+        }
+    })
+
+    //过去的每一天，你都在为此刻而战斗。乘风破浪会有时，直挂云帆济沧海，放开往日的学习中的紧张,用一颗平常心去轻松面对,我没有好的文笔来祝福你，但相信组长一定会考出自己理想的成绩，好运一直在陪伴着你。
+
+
+</script>
+</body>
+</html>
