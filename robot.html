@@ -20,7 +20,7 @@
 			{{x.text}}<img :src="x.img" v-if="x.img" alt=""></span>
         </li>
     </ul>
-    <div class="bot"><input type="text" v-model="turing_value"><span @click="foc">发送</span></div>
+    <div class="bot"><input type="text" v-model="turing_value" class="inp"><span @click="foc">发送</span></div>
 </div>
 
 
@@ -71,7 +71,6 @@
         }
     ];
     var url="",vei_wrods="",gotop=0,user_words={};
-
     var app=new Vue({
         el:"#app",
         mounted(){
@@ -100,8 +99,17 @@
                     user_words.text=app.turing_value;
                     user_words.host="p",
                     app.msg.push(user_words,vei_wrods)
-                    document.body.scrollTop=document.body.clientHeight+50;
+//                    console.log(app.msg)
                 })
+                console.log("12",$("#app").height())
+//                $(".inp").empty();
+                var go=$("#app").height();
+                setTimeout(function(){
+                    $("body").animate({
+                        scrollTop: go
+                    },500)
+                },500)
+
             }
         }
     })
