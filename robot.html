@@ -17,10 +17,14 @@
             <div :class="[x.host=='h'?left:right]" class="bg_img01 bg_img" v-if="x.host=='p'"></div>
             <div :class="[x.host=='h'?left:right]" class="bg_img02 bg_img" v-if="x.host=='h'"></div>
             <span :class="[x.host=='h'?msg_left:msg_right,x.host=='h'?left:right]" class="message_white">
-			{{x.text}}<img :src="x.img" v-if="x.img" alt=""></span>
+			{{x.text}}<img :src="x.img" v-if="x.img" alt="">
+                <ul class="news" v-if="x.list">
+                    <li v-for="y in x.list">{{y.article}}{{y.name}}<img :src="y.icon" alt=""><a :href="y.detailurl">查看详情</a></li>
+                </ul>
+            </span>
         </li>
     </ul>
-    <div class="bot"><input type="text" v-model="turing_value" class="inp"><span @click="foc">发送</span></div>
+    <div class="bot"><input type="text" v-model="turing_value" class="inp" ref="inp" @keyup.13="foc"><button @click="foc" class="btn" disabled>发送</button></div>
 </div>
 
 
@@ -32,45 +36,59 @@
 <script>
     "use strict";
     var info=[
-        {host:'p',
-            text:"到那个医院好？东院还是西院？",
-            date:"2017-05-05 10:30"
-        },{host:'p',
-            text:"迪丽热巴（Dilraba），1992年6月3日出生于新疆乌鲁木齐，中国内地女演员，毕业于上海戏剧学院。 2013年，主演个人首部电视剧《阿娜尔罕》。2014年参演古装玄幻剧《古剑奇谭》，2015年主演校园魔幻网络剧《逆光之恋》 ，同年凭借都市爱情剧《克拉恋人》获得2015年国剧盛典最受欢迎新人女演员,2016年8月，主演都市爱情剧《麻辣变形计》",
+        {host:'h',
+            text:"送你一个美美的迪丽热巴",
             date:"2017-05-05 10:23",
             img:"https://wx3.sinaimg.cn/mw690/63885668ly1fme7nioiofj211k1e0qv5.jpg",
             href:"https://www.bilibili.com/"
-        },{
-            host:'h',
-            text:"我们优秀的医师全在西院，东院已经出售，马上要拆了",
-            date:"2017-05-05 10:35"
-        },{
-            host:'h',
-            text:"ありがとうございます",
-            date:"2017-05-05 10:28"
         },
-        {host:'p',
-            text:"哦好好，谢谢",
-            date:"2017-05-05 10:38"
-        },{
-            host:'h',
-            text:"请问还有什么疑问吗？",
-            date:"2017-05-05 10:40"
-        },
-        {host:'p',
-            text:"好的太感谢您了，以后欢迎来玩",
-            date:"2017-05-05 10:55"
-        },{
-            host:'h',
-            text:"我们朝九晚六，周末双休，福利优厚，来着的话请你吃饭",
-            date:"2017-05-05 10:50"
-        },
-        {host:'p',
-            text:"医院几点上班？",
-            date:"2017-05-05 10:42"
-        }
+//        {host:'p',
+//            text:"到那个医院好？东院还是西院？",
+//            date:"2017-05-05 10:30"
+        //      },{
+//            host:'h',
+//            text:"我们优秀的医师全在西院，东院已经出售，马上要拆了",
+//            date:"2017-05-05 10:35"
+//        },{
+//            host:'h',
+//            text:"ありがとうございます",
+//            date:"2017-05-05 10:28"
+//        },
+//        {host:'p',
+//            text:"哦好好，谢谢",
+//            date:"2017-05-05 10:38"
+//        },{
+//            host:'h',
+//            text:"请问还有什么疑问吗？",
+//            date:"2017-05-05 10:40"
+//        },
+//        {host:'p',
+//            text:"好的太感谢您了，以后欢迎来玩",
+//            date:"2017-05-05 10:55"
+//        },{
+//            host:'h',
+//            text:"我们朝九晚六，周末双休，福利优厚，来着的话请你吃饭",
+//            date:"2017-05-05 10:50"
+//        },
+//        {host:'p',
+//            text:"医院几点上班？",
+//            date:"2017-05-05 10:42"
+//        }
     ];
-    var url="",vei_wrods="",gotop=0,user_words={};
+    var url="",vei_wrods="",gotop=0;
+    function judge_input(){
+        if($(".inp").val()==""){
+            $(".btn").attr({disabled:"disabled"});
+            $(".btn").css({
+                "background":"gray"
+            })
+        }else{
+            $(".btn").removeAttr("disabled");
+            $(".btn").css({
+                "background":"#38aef3"
+            })
+        }
+    }
     var app=new Vue({
         el:"#app",
         mounted(){
@@ -80,6 +98,16 @@
             });
             info.forEach((v,i,a)=>{return info[i].date=new Date(info[i].date).Format("yyyy年MM月dd hh:mm")})
             console.log(this.msg);
+            $(window).resize(function(){
+                var go=$("#app").height();
+                    $("body").animate({
+                        scrollTop: go
+                    },100)
+            })
+            this.$refs.inp.oninput=function(){
+                judge_input()
+            }
+
         },
         data:{
             turing_value:null,
@@ -96,15 +124,17 @@
                     vei_wrods=JSON.parse(data);
                     vei_wrods.host="h";
                     console.log(vei_wrods);
-                    user_words.text=app.turing_value;
-                    user_words.host="p",
+                    var user_words={};
+                     user_words.text=app.turing_value;
+                     user_words.host="p",
                     app.msg.push(user_words,vei_wrods)
-//                    console.log(app.msg)
+                    console.log(user_words)
                 })
                 console.log("12",$("#app").height())
-//                $(".inp").empty();
                 var go=$("#app").height();
                 setTimeout(function(){
+                    $(".inp").val("");
+                    judge_input();
                     $("body").animate({
                         scrollTop: go
                     },500)

@@ -156,24 +156,29 @@ body{
     position: fixed;
     bottom: 0;
     width: 100%;
+    font-size: 15px;
 }
 .bot input{
-    width: 88%;
+    width: 84%;
     height: 35px;
     display: inline-block;
     border: none;
-    font-size: 15px;
     background-color: #f5f5f5;
     padding: 2px;
 }
-.bot input:focus{
-
-}
-.bot span{
+.bot button{
     text-align: center;
     display: inline-block;
-    background-color: #38aef3;
+    background-color: gray;
     color:#fff;
-    width: 12%;
-    padding: 7px 4px;
+    width: 16%;
+    border:none;
+    padding: 10px 4px;
+}
+.news img{
+    display: block;
+}
+.news a{
+    display: block;
+    padding-top: 10px;
 }
